@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static System.Int32;
 
 namespace AdventOfCode2021
 {
@@ -17,42 +16,37 @@ namespace AdventOfCode2021
         private static void Day2Part2()
         {
             var entries = GetDay1PuzzleInput();
-            var pairs = new List<int>();
 
-            for (var i = 0; i < entries.Count(); i++)
-            {
-                var pair = entries.Skip(i).Take(3);
-                pairs.Add(pair.Sum());
-            }
+            var entriesArray = entries as int[] ?? entries.ToArray();
+            var pairs = entriesArray.Select((t, i) => entriesArray.Skip(i).Take(3)).Select(pair => pair.Sum()).ToList();
 
-            var enumerable = pairs.Select((x, index) =>
-            {
-                if (index == 0)
-                {
-                    return 0;
-                }
+            var enumerable = IsDepthIncreased(pairs);
 
-                return x > pairs.ElementAt(index - 1) ? 1 : 0;
-            });
-
-            Console.WriteLine($"Day1 Part 2: {enumerable.Count(x => x == 1)}");
+            Console.WriteLine($"Day1 Part 2: {enumerable.Count(x => x)}");
         }
 
         private static void Day1Part1()
         {
             var entries = GetDay1PuzzleInput();
-
             var entriesArray = entries as int[] ?? entries.ToArray();
-            var enumerable = entriesArray.Select((x, index) =>
+            var enumerable = IsDepthIncreased(entriesArray);
+
+            Console.WriteLine($"Day1 Part 1: {enumerable.Count(x => x)}");
+        }
+
+        private static IEnumerable<bool> IsDepthIncreased(IReadOnlyCollection<int> pairs)
+        {
+            var enumerable = pairs.Select((x, index) =>
             {
                 if (index == 0)
                 {
-                    return 0;
+                    return false;
                 }
 
-                return x > entriesArray.ElementAt(index - 1) ? 1 : 0;
+                return x > pairs.ElementAt(index - 1);
             });
-            Console.WriteLine($"Day1 Part 1: {enumerable.Count(x => x == 1)}");
+
+            return enumerable;
         }
 
         private static IEnumerable<int> GetDay1PuzzleInput()
