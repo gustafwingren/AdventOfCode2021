@@ -9,10 +9,104 @@ namespace AdventOfCode2021
     {
         static void Main(string[] args)
         {
-            Day1Part1();
-            Day1Part2();
-            Day2Part1();
-            Day2Part2();
+            // Day1Part1();
+            // Day1Part2();
+            // Day2Part1();
+            // Day2Part2();
+            Day3Part1();
+            Day3Part2();
+        }
+
+        private static void Day3Part2()
+        {
+            var puzzleInput = GetDay3PuzzleInput();
+
+            var oxygenArray = puzzleInput.ToArray();
+            var co2ScrubberArray = puzzleInput.ToArray();
+
+            for (var i = 0; i < puzzleInput.First().Length; i++)
+            {
+                if (oxygenArray.Length == 1)
+                {
+                    break;
+                }
+
+                var zeroCounter = 0;
+                var oneCounter = 0;
+
+                foreach (var input in oxygenArray)
+                {
+                    var bit = input.ElementAt(i) == '0' ? zeroCounter++ : oneCounter++;
+                }
+
+                if (zeroCounter > oneCounter)
+                {
+                    oxygenArray = oxygenArray.Where(x => x.ElementAt(i) == '0').ToArray();
+                }
+                else if (zeroCounter == oneCounter)
+                {
+                    oxygenArray = oxygenArray.Where(x => x.ElementAt(i) == '1').ToArray();
+                }
+                else
+                {
+                    oxygenArray = oxygenArray.Where(x => x.ElementAt(i) == '1').ToArray();
+                }
+            }
+
+            for (var i = 0; i < puzzleInput.First().Length; i++)
+            {
+                if (co2ScrubberArray.Length == 1)
+                {
+                    break;
+                }
+
+                var zeroCounter = 0;
+                var oneCounter = 0;
+
+                foreach (var input in co2ScrubberArray)
+                {
+                    var bit = input.ElementAt(i) == '0' ? zeroCounter++ : oneCounter++;
+                }
+
+                if (zeroCounter > oneCounter)
+                {
+                    co2ScrubberArray = co2ScrubberArray.Where(x => x.ElementAt(i) == '1').ToArray();
+                }
+                else if (zeroCounter == oneCounter)
+                {
+                    co2ScrubberArray = co2ScrubberArray.Where(x => x.ElementAt(i) == '0').ToArray();
+                }
+                else
+                {
+                    co2ScrubberArray = co2ScrubberArray.Where(x => x.ElementAt(i) == '0').ToArray();
+                }
+            }
+
+            Console.WriteLine($"Day3 Part2: {Convert.ToInt32(oxygenArray[0], 2) * Convert.ToInt32(co2ScrubberArray[0], 2)}");
+        }
+
+        private static void Day3Part1()
+        {
+            var puzzleInput = GetDay3PuzzleInput();
+
+            var gammaBinary = "";
+            var epsilonBinary = "";
+
+            for (var i = 0; i < puzzleInput.First().Length; i++)
+            {
+                var zeroCounter = 0;
+                var oneCounter = 0;
+
+                foreach (var input in puzzleInput)
+                {
+                    var i1 = input.ElementAt(i) == '0' ? zeroCounter++ : oneCounter++;
+                }
+
+                gammaBinary += zeroCounter > oneCounter ? "0" : "1";
+                epsilonBinary += zeroCounter < oneCounter ? "0" : "1";
+            }
+
+            Console.WriteLine($"Day3 Par1: {Convert.ToInt32(gammaBinary, 2) * Convert.ToInt32(epsilonBinary, 2)}");
         }
 
         private static void Day2Part2()
@@ -124,6 +218,11 @@ namespace AdventOfCode2021
                     _ => Tuple.Create(0, 0)
                 };
             });
+        }
+
+        private static IEnumerable<string> GetDay3PuzzleInput()
+        {
+            return File.ReadLines("../../../Day3Input.txt");
         }
     }
 }
