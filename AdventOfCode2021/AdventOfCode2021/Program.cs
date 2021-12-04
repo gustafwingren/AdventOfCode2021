@@ -13,8 +13,50 @@ namespace AdventOfCode2021
             // Day1Part2();
             // Day2Part1();
             // Day2Part2();
-            Day3Part1();
-            Day3Part2();
+            // Day3Part1();
+            // Day3Part2();
+            Day4Part1();
+            Day4Part2();
+        }
+        
+        private static void Day4Part2()
+        {
+            var (numbers, boards) = GetDay4PuzzleInput();
+            var boardsInCompletion = new List<Board>();
+
+            foreach (var number in numbers)
+            {
+                foreach (var board in boards.ToArray())
+                {
+                    board.AddNumber(number);
+                    if (board.Point <= 0) continue;
+                    
+                    boardsInCompletion.Add(board);
+                    boards.Remove(board);
+                }
+            }
+            
+            Console.WriteLine($"Day4 Part2: { boardsInCompletion.Last().Point }");
+        }
+        
+        private static void Day4Part1()
+        {
+            var (numbers, boards) = GetDay4PuzzleInput();
+            var boardsInCompletion = new List<Board>();
+
+            foreach (var number in numbers)
+            {
+                foreach (var board in boards.ToArray())
+                {
+                    board.AddNumber(number);
+                    if (board.Point <= 0) continue;
+                    
+                    boardsInCompletion.Add(board);
+                    boards.Remove(board);
+                }
+            }
+            
+            Console.WriteLine($"Day4 Part1: { boardsInCompletion.First().Point }");
         }
 
         private static void Day3Part2()
@@ -223,6 +265,17 @@ namespace AdventOfCode2021
         private static IEnumerable<string> GetDay3PuzzleInput()
         {
             return File.ReadLines("../../../Day3Input.txt");
+        }
+        
+        private static (IEnumerable<int>, List<Board>) GetDay4PuzzleInput()
+        {
+            var input = File.ReadLines("../../../Day4Input.txt");
+
+            var numbers = input.ElementAt(0).Split(',').Select(x => Convert.ToInt32(x));
+
+            var boards = input.Skip(2).Chunk(6).Select(x => new Board(x));
+
+            return (numbers, boards.ToList());
         }
     }
 }
